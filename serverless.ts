@@ -1,24 +1,23 @@
-import type { AWS } from '@serverless/typescript';
-
-import hello from '@functions/hello';
+import type { AWS } from "@serverless/typescript";
+import hello from "src/lambdas/hello";
 
 const serverlessConfiguration: AWS = {
-  service: 'felix-task',
-  frameworkVersion: '3',
-  plugins: ['serverless-esbuild'],
+  service: "felix-task",
+  frameworkVersion: "3",
+  plugins: ["serverless-esbuild", "serverless-offline"],
   provider: {
-    name: 'aws',
-    runtime: 'nodejs14.x',
+    name: "aws",
+    region: "ap-southeast-2",
+    runtime: "nodejs18.x",
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
     environment: {
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
+      NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
     },
   },
-  // import the function via paths
   functions: { hello },
   package: { individually: true },
   custom: {
@@ -26,10 +25,10 @@ const serverlessConfiguration: AWS = {
       bundle: true,
       minify: false,
       sourcemap: true,
-      exclude: ['aws-sdk'],
-      target: 'node14',
-      define: { 'require.resolve': undefined },
-      platform: 'node',
+      exclude: ["aws-sdk"],
+      target: "node18",
+      define: { "require.resolve": undefined },
+      platform: "node",
       concurrency: 10,
     },
   },
