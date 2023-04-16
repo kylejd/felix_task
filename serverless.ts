@@ -1,10 +1,14 @@
 import type { AWS } from "@serverless/typescript";
-import hello from "src/lambdas/hello";
+import recipePost from "src/lambdas/recipePost";
 
 const serverlessConfiguration: AWS = {
   service: "felix-task",
   frameworkVersion: "3",
-  plugins: ["serverless-esbuild", "serverless-offline"],
+  plugins: [
+    "serverless-esbuild",
+    "serverless-offline",
+    "serverless-dynamodb-local",
+  ],
   provider: {
     name: "aws",
     region: "ap-southeast-2",
@@ -17,8 +21,48 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
     },
+    iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: [
+          "dynamodb:DescribeTable",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+        ],
+        Resource: "arn:aws:dynamodb:ap-southeast-2:*:table/*",
+      },
+    ],
   },
-  functions: { hello },
+  resources: {
+    Resources: {
+      usersTable: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          TableName: "recipeTable",
+          AttributeDefinitions: [
+            {
+              AttributeName: "title",
+              AttributeType: "S",
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: "title",
+              KeyType: "HASH",
+            },
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+        },
+      },
+    },
+  },
+  functions: { recipePost },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -30,6 +74,19 @@ const serverlessConfiguration: AWS = {
       define: { "require.resolve": undefined },
       platform: "node",
       concurrency: 10,
+    },
+
+    dynamodb: {
+      stages: ["dev"],
+      start: {
+        port: 5000,
+        inMemory: true,
+        heapInitial: "200m",
+        heapMax: "1g",
+        migrate: true,
+        seed: true,
+        convertEmptyValues: true,
+      },
     },
   },
 };
