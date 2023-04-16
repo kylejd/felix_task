@@ -1,8 +1,8 @@
-import schema from "./schema";
-import { handlerPath } from "@utils/handler-resolver";
+import { handlerPath } from "src/utils";
+import schema from "./eventSchema";
 
 export default {
-  handler: `${handlerPath(__dirname)}/handler.main`,
+  handler: `${handlerPath(__dirname)}/handler.handler`,
   events: [
     {
       http: {

@@ -1,15 +1,26 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from "@utils/api-gateway";
-import { formatJSONResponse } from "@utils/api-gateway";
-import { middyfy } from "@utils/lambda";
-import schema from "./schema";
+import middy from "@middy/core";
+import httpErrorHandler from "@middy/http-error-handler";
+import validator from "@middy/validator";
+import eventSchema from "./eventSchema";
+import { ValidatedEventAPIGatewayProxyEvent } from "src/types";
+import { formatJSONResponse } from "src/utils";
+import { transpileSchema } from "@middy/validator/transpile";
+import httpJsonBodyParser from "@middy/http-json-body-parser";
 
-const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-  event
-) => {
+type EventType = ValidatedEventAPIGatewayProxyEvent<typeof eventSchema>;
+
+const lambdaHandler: EventType = async (event) => {
   return formatJSONResponse({
     message: `Hello ${event.body.name}, welcome to the exciting Serverless world!`,
-    event,
   });
 };
 
-export const main = middyfy(hello);
+export const handler = middy()
+  .use(httpJsonBodyParser())
+  .use(
+    validator({
+      eventSchema: transpileSchema(eventSchema),
+    })
+  )
+  .use(httpErrorHandler())
+  .handler(lambdaHandler);
