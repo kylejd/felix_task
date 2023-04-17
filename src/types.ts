@@ -3,7 +3,7 @@ import type { FromSchema } from "json-schema-to-ts";
 
 type ValidatedAPIGatewayProxyEvent<S, Q> = Omit<APIGatewayProxyEvent, "body"> & {
   body: FromSchema<S>;
-  queryStringParameters?: Q;
+  queryStringParameters: FromSchema<Q>;
 };
 
 export type ValidatedEventAPIGatewayProxyEvent<S, Q> = Handler<

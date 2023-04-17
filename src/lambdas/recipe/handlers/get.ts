@@ -4,25 +4,33 @@ import { ValidatedEventAPIGatewayProxyEvent } from "src/types";
 import { formatJSONResponse } from "src/utils";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import createDynamoDBClient from "src/database";
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { GetCommand } from "@aws-sdk/lib-dynamodb";
 
-export const recipePostBody = {
+export const recipeGetParams = {
   type: "object",
   properties: {
-    title: { type: "string" },
+    id: { type: "string" },
   },
-  required: ["title"],
+  required: ["id"],
 } as const;
 
-const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<typeof recipePostBody, undefined> = async (event) => {
-  const { body } = event;
+const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<undefined, typeof recipeGetParams> = async (event) => {
+  const { queryStringParameters } = event;
+
+  const { id } = queryStringParameters;
 
   const dynamoDBClient = createDynamoDBClient();
-  const command = new PutCommand({ TableName: "recipeTable", Item: body });
-  await dynamoDBClient.send(command);
+  const command = new GetCommand({
+    TableName: "recipeTable",
+    Key: {
+      primaryKey: id,
+    },
+  });
+
+  const recipe = await dynamoDBClient.send(command);
 
   return formatJSONResponse({
-    message: `Created`,
+    ...recipe.Item,
   });
 };
 
