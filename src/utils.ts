@@ -17,8 +17,11 @@ export const formatRoute = (props: {
   bodySchema?: {
     [k: string]: unknown;
   };
+  queryStringSchema?: {
+    [k: string]: unknown;
+  };
 }) => {
-  const { path, functionName, methodRoute, pathRoute, bodySchema } = props;
+  const { path, functionName, methodRoute, pathRoute, bodySchema = {}, queryStringSchema = {} } = props;
 
   return {
     handler: `${path}/handlers/${functionName}`,
@@ -32,6 +35,8 @@ export const formatRoute = (props: {
             schemas: {
               "application/json": bodySchema,
             },
+
+            parameters: { querystrings: queryStringSchema },
           },
         },
       },

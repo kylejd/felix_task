@@ -5,20 +5,23 @@ import { formatJSONResponse } from "src/utils";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import createDynamoDBClient from "src/database";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { z } from "zod";
+import zodToJsonSchema from "zod-to-json-schema";
+import { nanoid } from "nanoid";
 
-export const recipePostBody = {
-  type: "object",
-  properties: {
-    title: { type: "string" },
-  },
-  required: ["title"],
-} as const;
+const recipePostBody = z.object({
+  title: z.string(),
+  steps: z.string(),
+});
+type RecipePostBody = z.infer<typeof recipePostBody>;
 
-const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<typeof recipePostBody, undefined> = async (event) => {
+export const recipePostBodySchema = zodToJsonSchema(recipePostBody, "recipePostBodySchema");
+
+const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}> = async (event) => {
   const { body } = event;
 
   const dynamoDBClient = createDynamoDBClient();
-  const command = new PutCommand({ TableName: "recipeTable", Item: body });
+  const command = new PutCommand({ TableName: "recipeTable", Item: { id: nanoid(), ...body } });
   await dynamoDBClient.send(command);
 
   return formatJSONResponse({

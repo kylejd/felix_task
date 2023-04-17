@@ -5,16 +5,16 @@ import { formatJSONResponse } from "src/utils";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import createDynamoDBClient from "src/database";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
+import { z } from "zod";
+import zodToJsonSchema from "zod-to-json-schema";
 
-export const recipeGetParams = {
-  type: "object",
-  properties: {
-    id: { type: "string" },
-  },
-  required: ["id"],
-} as const;
+const recipeGetParams = z.object({
+  id: z.string().uuid(),
+});
+type RecipeGetParams = z.infer<typeof recipeGetParams>;
+export const recipeGetParamsSchema = zodToJsonSchema(recipeGetParams, "recipeGetParamsSchema");
 
-const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<undefined, typeof recipeGetParams> = async (event) => {
+const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<{}, RecipeGetParams> = async (event) => {
   const { queryStringParameters } = event;
 
   const { id } = queryStringParameters;
