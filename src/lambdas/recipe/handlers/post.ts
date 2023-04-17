@@ -1,9 +1,11 @@
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
 import middy from "@middy/core";
+import httpEventNormalizer from "@middy/http-event-normalizer";
+import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import { StatusCodes } from "http-status-codes";
 import { createDynamoDocumentClient } from "src/shared/database";
-import { httpErrorHandlerConfigured } from "src/shared/middleware";
+import { httpErrorHandlerConfigured, inputOutputLoggerConfigured } from "src/shared/middleware";
 import { ValidatedEventAPIGatewayProxyEvent } from "src/shared/types";
 import { formatJSONResponse } from "src/shared/utils";
 import { v4 as uuidv4 } from "uuid";
@@ -35,4 +37,10 @@ const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}, {}> 
   });
 };
 
-export const handler = middy().use(httpJsonBodyParser()).use(httpErrorHandlerConfigured).handler(lambdaHandler);
+export const handler = middy()
+  .use(httpJsonBodyParser())
+  .use(inputOutputLoggerConfigured())
+  .use(httpEventNormalizer())
+  .use(httpHeaderNormalizer())
+  .use(httpErrorHandlerConfigured)
+  .handler(lambdaHandler);
