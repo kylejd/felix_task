@@ -4,7 +4,8 @@
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
-    "offline": "serverless offline start"
+    "offline": "serverless offline start",
+    "install-offline": "sls dynamodb install --localPath ./bin"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -20,6 +21,7 @@
     "zod-to-json-schema": "^3.20.4"
   },
   "devDependencies": {
+    "dynamodb-localhost": "https://github.com/99x/dynamodb-localhost#db30898f8c40932c7177be7b2f1a81360d12876d",
     "@serverless/typescript": "^3.0.0",
     "@types/aws-lambda": "^8.10.71",
     "@types/node": "^18.15.11",
@@ -35,6 +37,11 @@
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT",
+  "overrides": {
+    "serverless-dynamodb-local": {
+      "dynamodb-localhost": "https://github.com/99x/dynamodb-localhost#db30898f8c40932c7177be7b2f1a81360d12876d"
+    }
+  },
   "prettier": {
     "printWidth": 120
   }
