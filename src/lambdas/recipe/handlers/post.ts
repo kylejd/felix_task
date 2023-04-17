@@ -7,7 +7,7 @@ import createDynamoDBClient from "src/database";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
 
 const recipePostBody = z.object({
   title: z.string(),
@@ -20,7 +20,7 @@ const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}> = as
   const { body } = event;
 
   const dynamoDBClient = createDynamoDBClient();
-  const command = new PutCommand({ TableName: "recipeTable", Item: { id: nanoid(), ...body } });
+  const command = new PutCommand({ TableName: "recipeTable", Item: { id: uuidv4(), ...body } });
   await dynamoDBClient.send(command);
 
   return formatJSONResponse({
