@@ -1,15 +1,12 @@
-import type {
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-  Handler,
-} from "aws-lambda";
-import type { FromSchema } from "json-schema-to-ts";
+import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from "aws-lambda";
 
-type ValidatedAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEvent, "body"> & {
-  body: FromSchema<S>;
+type ValidatedAPIGatewayProxyEvent<S, Q, U> = Omit<APIGatewayProxyEvent, "body"> & {
+  body: S;
+  queryStringParameters: Q;
+  pathParameters: U;
 };
 
-export type ValidatedEventAPIGatewayProxyEvent<S> = Handler<
-  ValidatedAPIGatewayProxyEvent<S>,
+export type ValidatedEventAPIGatewayProxyEvent<S, Q, U> = Handler<
+  ValidatedAPIGatewayProxyEvent<S, Q, U>,
   APIGatewayProxyResult
 >;

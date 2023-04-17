@@ -1,14 +1,11 @@
 import type { AWS } from "@serverless/typescript";
-import recipePost from "src/lambdas/recipePost";
+import { createRecipe, getRecipe } from "src/lambdas/recipe";
 
 const serverlessConfiguration: AWS = {
   service: "felix-task",
   frameworkVersion: "3",
-  plugins: [
-    "serverless-esbuild",
-    "serverless-offline",
-    "serverless-dynamodb-local",
-  ],
+  functions: { getRecipe, createRecipe },
+  plugins: ["serverless-esbuild", "serverless-offline", "serverless-dynamodb-local"],
   provider: {
     name: "aws",
     region: "ap-southeast-2",
@@ -38,19 +35,19 @@ const serverlessConfiguration: AWS = {
   },
   resources: {
     Resources: {
-      usersTable: {
+      recipeTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
           TableName: "recipeTable",
           AttributeDefinitions: [
             {
-              AttributeName: "title",
+              AttributeName: "id",
               AttributeType: "S",
             },
           ],
           KeySchema: [
             {
-              AttributeName: "title",
+              AttributeName: "id",
               KeyType: "HASH",
             },
           ],
@@ -62,7 +59,6 @@ const serverlessConfiguration: AWS = {
       },
     },
   },
-  functions: { recipePost },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -75,7 +71,6 @@ const serverlessConfiguration: AWS = {
       platform: "node",
       concurrency: 10,
     },
-
     dynamodb: {
       stages: ["dev"],
       start: {
