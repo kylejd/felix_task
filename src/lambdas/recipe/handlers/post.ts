@@ -19,7 +19,6 @@ const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<typeof recipePostBodySch
 
   const dynamoDBClient = createDynamoDBClient();
   const command = new PutCommand({ TableName: "recipeTable", Item: body });
-
   await dynamoDBClient.send(command);
 
   return formatJSONResponse({
