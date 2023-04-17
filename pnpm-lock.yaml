@@ -69,6 +69,9 @@ devDependencies:
   serverless:
     specifier: ^3.0.0
     version: 3.30.1
+  serverless-add-api-key:
+    specifier: ^4.2.1
+    version: 4.2.1
   serverless-dynamodb-local:
     specifier: ^0.2.40
     version: 0.2.40
@@ -5094,6 +5097,13 @@ packages:
     resolution: {integrity: sha512-Qr3TosvguFt8ePWqsvRfrKyQXIiW+nGbYpy8XK24NQHE83caxWt+mIymTT19DGFbNWNLfEwsrkSmN64lVWB9ag==}
     dependencies:
       randombytes: 2.1.0
+    dev: true
+
+  /serverless-add-api-key@4.2.1:
+    resolution: {integrity: sha512-UOEWGo+8NgFzUDiZIDeeK8ssbWcUTc+3aDZIZqqXWAy4kZdYdEjK0itj30VyT2HN1LFSbD0dh9VLmBlhIyY+3A==}
+    dependencies:
+      aws-sdk: 2.1359.0
+      chalk: 2.4.2
     dev: true
 
   /serverless-dynamodb-local@0.2.40:
