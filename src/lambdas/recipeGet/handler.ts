@@ -7,7 +7,9 @@ import httpJsonBodyParser from "@middy/http-json-body-parser";
 import createDynamoDBClient from "src/database";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
 
-const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<typeof eventSchema> = async (event) => {
+type EventType = ValidatedEventAPIGatewayProxyEvent<typeof eventSchema>;
+
+const lambdaHandler: EventType = async (event) => {
   const { body } = event;
 
   const dynamoDBClient = createDynamoDBClient();

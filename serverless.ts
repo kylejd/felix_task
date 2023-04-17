@@ -4,11 +4,7 @@ import recipePost from "src/lambdas/recipePost";
 const serverlessConfiguration: AWS = {
   service: "felix-task",
   frameworkVersion: "3",
-  plugins: [
-    "serverless-esbuild",
-    "serverless-offline",
-    "serverless-dynamodb-local",
-  ],
+  plugins: ["serverless-esbuild", "serverless-offline", "serverless-dynamodb-local"],
   provider: {
     name: "aws",
     region: "ap-southeast-2",
