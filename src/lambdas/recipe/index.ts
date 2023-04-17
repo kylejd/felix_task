@@ -1,4 +1,4 @@
-import { recipeGetPathParametersSchema } from "./handlers/get";
+import { recipeGetPathParameters } from "./handlers/get";
 import { recipePostBodySchema } from "./handlers/post";
 import { formatRoute, handlerPath } from "src/shared/utils";
 
@@ -15,5 +15,5 @@ export const getRecipe = formatRoute({
   functionName: "get.handler",
   methodRoute: "get",
   pathRoute: "recipe/{id}",
-  pathParametersSchema: recipeGetPathParametersSchema,
+  pathParameters: Object.keys(recipeGetPathParameters.shape), // get the string values of the strings,
 });

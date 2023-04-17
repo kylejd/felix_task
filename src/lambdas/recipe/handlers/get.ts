@@ -7,13 +7,12 @@ import { createDynamoDocumentClient } from "src/shared/database";
 import { ValidatedEventAPIGatewayProxyEvent } from "src/shared/types";
 import { formatJSONResponse } from "src/shared/utils";
 import { z } from "zod";
-import zodToJsonSchema from "zod-to-json-schema";
 
-const recipeGetPathParameters = z.object({
+export const recipeGetPathParameters = z.object({
   id: z.string().uuid(),
 });
-type RecipeGetPathParameters = z.infer<typeof recipeGetPathParameters>;
-export const recipeGetPathParametersSchema = zodToJsonSchema(recipeGetPathParameters, "recipeGetParamsSchema");
+
+export type RecipeGetPathParameters = z.infer<typeof recipeGetPathParameters>;
 
 const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<{}, {}, RecipeGetPathParameters> = async (event) => {
   const { pathParameters } = event;
