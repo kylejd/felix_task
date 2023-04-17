@@ -13,7 +13,16 @@ dependencies:
   '@middy/http-error-handler':
     specifier: ^4.3.0
     version: 4.3.0
+  '@middy/http-event-normalizer':
+    specifier: ^4.3.0
+    version: 4.3.0
+  '@middy/http-header-normalizer':
+    specifier: ^4.3.0
+    version: 4.3.0
   '@middy/http-json-body-parser':
+    specifier: ^4.3.0
+    version: 4.3.0
+  '@middy/input-output-logger':
     specifier: ^4.3.0
     version: 4.3.0
   http-status-codes:
@@ -1478,8 +1487,25 @@ packages:
       '@middy/util': 4.3.0
     dev: false
 
+  /@middy/http-event-normalizer@4.3.0:
+    resolution: {integrity: sha512-Z0EWgHoMEL3YdAqH1iDcFaIPJDk6NTCmzO/Aj3xrOOv9pbp2NfzmE95M7JCRtdpQnEWzJB6UsOQRiTTrZHSN3Q==}
+    engines: {node: '>=16'}
+    dev: false
+
+  /@middy/http-header-normalizer@4.3.0:
+    resolution: {integrity: sha512-nRn84S91fqPY8sK7Rq98TMWwVLyoBjBhVY/i3ilOzgpGW8ciQ7Yf+RyzpRavVCWP6wC0d+p5Gu4RkjF3cFzUDw==}
+    engines: {node: '>=16'}
+    dev: false
+
   /@middy/http-json-body-parser@4.3.0:
     resolution: {integrity: sha512-rYwSKqK8TEmlyuPBflGAoGnTV8uz/qk6AeB5wl4xbWhGmAI+wttrq3qGBCfc1mhbh3QNIWHzYiojJt3aXGrEHA==}
+    engines: {node: '>=16'}
+    dependencies:
+      '@middy/util': 4.3.0
+    dev: false
+
+  /@middy/input-output-logger@4.3.0:
+    resolution: {integrity: sha512-3BEYf2t0EajEYsIKRFPU1M8auAsk+81scf04U/nSV08WFxJSgUGWRS4y6he4kk5uKPwNHj10w0TjhN30bCBsew==}
     engines: {node: '>=16'}
     dependencies:
       '@middy/util': 4.3.0

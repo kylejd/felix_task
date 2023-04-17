@@ -1,5 +1,6 @@
 import { logger } from "./logger";
 import httpErrorHandler from "@middy/http-error-handler";
+import inputOutputLogger from "@middy/input-output-logger";
 import { ReasonPhrases } from "http-status-codes";
 
 export const httpErrorHandlerConfigured = httpErrorHandler({
@@ -10,3 +11,11 @@ export const httpErrorHandlerConfigured = httpErrorHandler({
     message: ReasonPhrases.INTERNAL_SERVER_ERROR,
   }),
 });
+
+export const inputOutputLoggerConfigured = () =>
+  inputOutputLogger({
+    logger: (request: any) => {
+      const log = request.event ?? request.response;
+      logger.info(log);
+    },
+  });
