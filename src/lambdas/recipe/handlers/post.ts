@@ -29,8 +29,6 @@ const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}, {}> 
   });
   await dynamoDBClient.send(command);
 
-  throw new Error("Required");
-
   return formatJSONResponse({
     response: payload,
     statusCode: StatusCodes.CREATED,
