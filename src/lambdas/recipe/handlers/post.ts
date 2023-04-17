@@ -14,7 +14,6 @@ const recipePostBody = z.object({
   steps: z.string(),
 });
 type RecipePostBody = z.infer<typeof recipePostBody>;
-
 export const recipePostBodySchema = zodToJsonSchema(recipePostBody, "recipePostBodySchema");
 
 const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}> = async (event) => {

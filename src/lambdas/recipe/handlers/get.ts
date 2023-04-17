@@ -16,7 +16,6 @@ export const recipeGetParamsSchema = zodToJsonSchema(recipeGetParams, "recipeGet
 
 const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<{}, RecipeGetParams> = async (event) => {
   const { queryStringParameters } = event;
-
   const { id } = queryStringParameters;
 
   const dynamoDBClient = createDynamoDBClient();
