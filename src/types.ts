@@ -1,11 +1,12 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from "aws-lambda";
 
-type ValidatedAPIGatewayProxyEvent<S, Q> = Omit<APIGatewayProxyEvent, "body"> & {
+type ValidatedAPIGatewayProxyEvent<S, Q, U> = Omit<APIGatewayProxyEvent, "body"> & {
   body: S;
   queryStringParameters: Q;
+  pathParameters: U;
 };
 
-export type ValidatedEventAPIGatewayProxyEvent<S, Q> = Handler<
-  ValidatedAPIGatewayProxyEvent<S, Q>,
+export type ValidatedEventAPIGatewayProxyEvent<S, Q, U> = Handler<
+  ValidatedAPIGatewayProxyEvent<S, Q, U>,
   APIGatewayProxyResult
 >;

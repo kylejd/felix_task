@@ -6,6 +6,7 @@ import httpJsonBodyParser from "@middy/http-json-body-parser";
 import createDynamoDBClient from "src/database";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
 import { z } from "zod";
+import { StatusCodes } from "http-status-codes";
 import zodToJsonSchema from "zod-to-json-schema";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,15 +17,21 @@ const recipePostBody = z.object({
 type RecipePostBody = z.infer<typeof recipePostBody>;
 export const recipePostBodySchema = zodToJsonSchema(recipePostBody, "recipePostBodySchema");
 
-const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}> = async (event) => {
+const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}, {}> = async (event) => {
   const { body } = event;
 
+  const payload = { id: uuidv4(), ...body };
+
   const dynamoDBClient = createDynamoDBClient();
-  const command = new PutCommand({ TableName: "recipeTable", Item: { id: uuidv4(), ...body } });
+  const command = new PutCommand({
+    TableName: "recipeTable",
+    Item: payload,
+  });
   await dynamoDBClient.send(command);
 
   return formatJSONResponse({
-    message: `Created`,
+    response: payload,
+    statusCode: StatusCodes.CREATED,
   });
 };
 

@@ -1,10 +1,15 @@
+import { StatusCodes, getReasonPhrase } from "http-status-codes";
+
 export const handlerPath = (context: string) => {
   return `${context.split(process.cwd())[1].substring(1).replace(/\\/g, "/")}`;
 };
 
-export const formatJSONResponse = (response: Record<string, unknown>) => {
+export const formatJSONResponse = (props: { response?: Record<string, unknown>; statusCode?: number }) => {
+  const { statusCode = StatusCodes.OK } = props;
+  const { response = { message: getReasonPhrase(statusCode) } } = props;
+
   return {
-    statusCode: 200,
+    statusCode,
     body: JSON.stringify(response),
   };
 };
@@ -16,8 +21,17 @@ export const formatRoute = (props: {
   pathRoute: string;
   bodySchema?: any; // json schema
   queryStringSchema?: any; // json schema
+  pathParametersSchema?: any; // json schema
 }) => {
-  const { path, functionName, methodRoute, pathRoute, bodySchema = {}, queryStringSchema = {} } = props;
+  const {
+    path,
+    functionName,
+    methodRoute,
+    pathRoute,
+    bodySchema = {},
+    queryStringSchema = {},
+    pathParametersSchema = {},
+  } = props;
 
   return {
     handler: `${path}/handlers/${functionName}`,
@@ -32,7 +46,7 @@ export const formatRoute = (props: {
               "application/json": bodySchema,
             },
 
-            parameters: { querystrings: queryStringSchema },
+            parameters: { querystrings: queryStringSchema, paths: pathParametersSchema },
           },
         },
       },

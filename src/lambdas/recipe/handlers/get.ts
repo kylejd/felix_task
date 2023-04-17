@@ -7,29 +7,37 @@ import createDynamoDBClient from "src/database";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
+import { StatusCodes } from "http-status-codes";
 
-const recipeGetParams = z.object({
+const recipeGetPathParameters = z.object({
   id: z.string().uuid(),
 });
-type RecipeGetParams = z.infer<typeof recipeGetParams>;
-export const recipeGetParamsSchema = zodToJsonSchema(recipeGetParams, "recipeGetParamsSchema");
+type RecipeGetPathParameters = z.infer<typeof recipeGetPathParameters>;
+export const recipeGetPathParametersSchema = zodToJsonSchema(recipeGetPathParameters, "recipeGetParamsSchema");
 
-const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<{}, RecipeGetParams> = async (event) => {
-  const { queryStringParameters } = event;
-  const { id } = queryStringParameters;
+const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<{}, {}, RecipeGetPathParameters> = async (event) => {
+  const { pathParameters } = event;
+  console.log(pathParameters);
+  const { id } = pathParameters;
 
   const dynamoDBClient = createDynamoDBClient();
   const command = new GetCommand({
     TableName: "recipeTable",
     Key: {
-      primaryKey: id,
+      id: id,
     },
   });
 
-  const recipe = await dynamoDBClient.send(command);
+  const data = await dynamoDBClient.send(command);
+
+  if (!data.Item) {
+    return formatJSONResponse({
+      statusCode: StatusCodes.NOT_FOUND,
+    });
+  }
 
   return formatJSONResponse({
-    ...recipe.Item,
+    response: data.Item,
   });
 };
 

@@ -16,6 +16,9 @@ dependencies:
   '@middy/http-json-body-parser':
     specifier: ^4.3.0
     version: 4.3.0
+  http-status-codes:
+    specifier: ^2.2.0
+    version: 2.2.0
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -3251,6 +3254,10 @@ packages:
   /http-cache-semantics@4.1.1:
     resolution: {integrity: sha512-er295DKPVsV82j5kw1Gjt+ADA/XYHsajl82cGNQG2eyoPkvgUhX+nDIyelzhIWbbsXP39EHcI6l5tYs2FYqYXQ==}
     dev: true
+
+  /http-status-codes@2.2.0:
+    resolution: {integrity: sha512-feERVo9iWxvnejp3SEfm/+oNG517npqL2/PIA8ORjyOZjGC7TwCRQsZylciLS64i6pJ0wRYz3rkXLRwbtFa8Ng==}
+    dev: false
 
   /http2-wrapper@1.0.3:
     resolution: {integrity: sha512-V+23sDMr12Wnz7iTcDeJr3O6AIxlnvT/bmaAAAP/Xda35C90p9599p0F1eHR/N1KILWSoWVAiOMFjBBXaXSMxg==}

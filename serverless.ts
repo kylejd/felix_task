@@ -41,13 +41,13 @@ const serverlessConfiguration: AWS = {
           TableName: "recipeTable",
           AttributeDefinitions: [
             {
-              AttributeName: "title",
+              AttributeName: "id",
               AttributeType: "S",
             },
           ],
           KeySchema: [
             {
-              AttributeName: "title",
+              AttributeName: "id",
               KeyType: "HASH",
             },
           ],
