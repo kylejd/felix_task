@@ -1,7 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
-const createDynamoDocumentClient = (): DynamoDBClient => {
+export const createDynamoDocumentClient = (): DynamoDBClient => {
   if (process.env.IS_OFFLINE) {
     return DynamoDBDocumentClient.from(
       new DynamoDBClient({
@@ -13,5 +13,3 @@ const createDynamoDocumentClient = (): DynamoDBClient => {
 
   return DynamoDBDocumentClient.from(new DynamoDBClient({}));
 };
-
-export default createDynamoDocumentClient;

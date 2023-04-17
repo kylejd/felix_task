@@ -3,9 +3,9 @@ import middy from "@middy/core";
 import httpErrorHandler from "@middy/http-error-handler";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import { StatusCodes } from "http-status-codes";
-import createDynamoDBClient from "src/database";
-import { ValidatedEventAPIGatewayProxyEvent } from "src/types";
-import { formatJSONResponse } from "src/utils";
+import { createDynamoDocumentClient } from "src/shared/database";
+import { ValidatedEventAPIGatewayProxyEvent } from "src/shared/types";
+import { formatJSONResponse } from "src/shared/utils";
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
 
@@ -20,7 +20,7 @@ const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<{}, {}, RecipeGetPathPar
   console.log(pathParameters);
   const { id } = pathParameters;
 
-  const dynamoDBClient = createDynamoDBClient();
+  const dynamoDBClient = createDynamoDocumentClient();
   const command = new GetCommand({
     TableName: "recipeTable",
     Key: {
