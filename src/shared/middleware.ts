@@ -16,6 +16,6 @@ export const inputOutputLoggerConfigured = () =>
   inputOutputLogger({
     logger: (request: any) => {
       const log = request.event ?? request.response;
-      logger.info(typeof log === "string" ? log : JSON.stringify(log));
+      logger.info(log);
     },
   });
