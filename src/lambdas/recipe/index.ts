@@ -1,6 +1,6 @@
-import { formatRoute, handlerPath } from "src/utils";
-import { recipePostBodySchema } from "./handlers/post";
 import { recipeGetPathParametersSchema } from "./handlers/get";
+import { recipePostBodySchema } from "./handlers/post";
+import { formatRoute, handlerPath } from "src/utils";
 
 export const createRecipe = formatRoute({
   path: handlerPath(__dirname),
