@@ -14,7 +14,7 @@ export const recipePostBodySchema = {
   required: ["title"],
 } as const;
 
-const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<typeof recipePostBodySchema> = async (event) => {
+const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<typeof recipePostBodySchema, {}> = async (event) => {
   const { body } = event;
 
   const dynamoDBClient = createDynamoDBClient();
