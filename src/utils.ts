@@ -8,3 +8,33 @@ export const formatJSONResponse = (response: Record<string, unknown>) => {
     body: JSON.stringify(response),
   };
 };
+
+export const formatRoute = (props: {
+  path: string;
+  functionName: string;
+  methodRoute: string;
+  pathRoute: string;
+  bodySchema?: {
+    [k: string]: unknown;
+  };
+}) => {
+  const { path, functionName, methodRoute, pathRoute, bodySchema } = props;
+
+  return {
+    handler: `${path}/handlers/${functionName}`,
+    events: [
+      {
+        http: {
+          method: methodRoute,
+          path: pathRoute,
+
+          request: {
+            schemas: {
+              "application/json": bodySchema,
+            },
+          },
+        },
+      },
+    ],
+  };
+};
