@@ -1,14 +1,14 @@
-import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
-import { ValidatedEventAPIGatewayProxyEvent } from "src/types";
-import { formatJSONResponse } from "src/utils";
-import httpJsonBodyParser from "@middy/http-json-body-parser";
-import createDynamoDBClient from "src/database";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
-import { z } from "zod";
+import middy from "@middy/core";
+import httpJsonBodyParser from "@middy/http-json-body-parser";
 import { StatusCodes } from "http-status-codes";
-import zodToJsonSchema from "zod-to-json-schema";
+import { createDynamoDocumentClient } from "src/shared/database";
+import { httpErrorHandlerConfigured } from "src/shared/middleware";
+import { ValidatedEventAPIGatewayProxyEvent } from "src/shared/types";
+import { formatJSONResponse } from "src/shared/utils";
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
+import zodToJsonSchema from "zod-to-json-schema";
 
 const recipePostBody = z.object({
   title: z.string(),
@@ -22,7 +22,7 @@ const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}, {}> 
 
   const payload = { id: uuidv4(), ...body };
 
-  const dynamoDBClient = createDynamoDBClient();
+  const dynamoDBClient = createDynamoDocumentClient();
   const command = new PutCommand({
     TableName: "recipeTable",
     Item: payload,
@@ -35,4 +35,4 @@ const lambdaHandler: ValidatedEventAPIGatewayProxyEvent<RecipePostBody, {}, {}> 
   });
 };
 
-export const handler = middy().use(httpJsonBodyParser()).use(httpErrorHandler()).handler(lambdaHandler);
+export const handler = middy().use(httpJsonBodyParser()).use(httpErrorHandlerConfigured).handler(lambdaHandler);

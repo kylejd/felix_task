@@ -20,18 +20,14 @@ export const formatRoute = (props: {
   methodRoute: string;
   pathRoute: string;
   bodySchema?: any; // json schema
-  queryStringSchema?: any; // json schema
-  pathParametersSchema?: any; // json schema
+  queryStrings?: string[];
+  pathParameters?: string[];
 }) => {
-  const {
-    path,
-    functionName,
-    methodRoute,
-    pathRoute,
-    bodySchema = {},
-    queryStringSchema = {},
-    pathParametersSchema = {},
-  } = props;
+  const { path, functionName, methodRoute, pathRoute, bodySchema, queryStrings = [], pathParameters = [] } = props;
+
+  // API gateway can only validate if these properties exist
+  const queryStringsFormatted = queryStrings.reduce((obj, item) => ({ ...obj, [item]: true }), {});
+  const pathParametersFormatted = pathParameters.reduce((obj, item) => ({ ...obj, [item]: true }), {});
 
   return {
     handler: `${path}/handlers/${functionName}`,
@@ -42,11 +38,13 @@ export const formatRoute = (props: {
           path: pathRoute,
 
           request: {
-            schemas: {
-              "application/json": bodySchema,
-            },
+            schemas: bodySchema
+              ? {
+                  "application/json": bodySchema,
+                }
+              : undefined,
 
-            parameters: { querystrings: queryStringSchema, paths: pathParametersSchema },
+            parameters: { querystrings: queryStringsFormatted, paths: pathParametersFormatted },
           },
         },
       },
