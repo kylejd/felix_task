@@ -14,12 +14,8 @@ export const formatRoute = (props: {
   functionName: string;
   methodRoute: string;
   pathRoute: string;
-  bodySchema?: {
-    [k: string]: unknown;
-  };
-  queryStringSchema?: {
-    [k: string]: unknown;
-  };
+  bodySchema?: any; // json schema
+  queryStringSchema?: any; // json schema
 }) => {
   const { path, functionName, methodRoute, pathRoute, bodySchema = {}, queryStringSchema = {} } = props;
 

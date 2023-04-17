@@ -1,10 +1,10 @@
 import type { AWS } from "@serverless/typescript";
-import { createRecipe } from "src/lambdas/recipe";
+import { createRecipe, getRecipe } from "src/lambdas/recipe";
 
 const serverlessConfiguration: AWS = {
   service: "felix-task",
   frameworkVersion: "3",
-  functions: { createRecipe },
+  functions: { getRecipe, createRecipe },
   plugins: ["serverless-esbuild", "serverless-offline", "serverless-dynamodb-local"],
   provider: {
     name: "aws",
