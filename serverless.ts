@@ -39,6 +39,20 @@ const serverlessConfiguration: AWS = {
   },
   resources: {
     Resources: {
+      BadRequestBodyResponse: {
+        Type: "AWS::ApiGateway::GatewayResponse",
+        Properties: {
+          ResponseTemplates: {
+            "application/json": '{ "message": "$context.error.validationErrorString"}',
+          },
+          ResponseType: "BAD_REQUEST_BODY",
+          RestApiId: {
+            Ref: "ApiGatewayRestApi",
+          },
+          StatusCode: "400",
+        },
+      },
+
       RecipeTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
