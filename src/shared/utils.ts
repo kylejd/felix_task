@@ -36,7 +36,6 @@ export const formatRoute = (props: {
         http: {
           method: methodRoute,
           path: pathRoute,
-
           request: {
             schemas: bodySchema
               ? {
@@ -46,6 +45,7 @@ export const formatRoute = (props: {
 
             parameters: { querystrings: queryStringsFormatted, paths: pathParametersFormatted },
           },
+          private: true,
         },
       },
     ],

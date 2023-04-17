@@ -39,7 +39,7 @@ const serverlessConfiguration: AWS = {
   },
   resources: {
     Resources: {
-      recipeTable: {
+      RecipeTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
           TableName: "recipeTable",
